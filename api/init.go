@@ -1,19 +1,23 @@
 package api
 
 import (
+	"context"
 	"log"
 
-	"github.com/lmuench/gommanded/api/account/projector"
+	"cloud.google.com/go/datastore"
 	"github.com/streadway/amqp"
 )
 
 var (
-	conn *amqp.Connection
-	ch   *amqp.Channel
-	q    amqp.Queue
+	conn   *amqp.Connection
+	ch     *amqp.Channel
+	q      amqp.Queue
+	ctx    context.Context
+	client *datastore.Client
 )
 
-func init() {
+func Init(context context.Context, dsClient *datastore.Client) {
+	ctx, client = context, dsClient
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	// TODO: call `conn.Close()` somewhere for graceful shutdown
@@ -29,8 +33,6 @@ func init() {
 		nil,        // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-
-	projector.Init()
 }
 
 func failOnError(err error, msg string) {

@@ -17,7 +17,7 @@ func OpenAccount(account typ.Account) (*typ.Account, error) {
 	accountOpened := event.AccountOpened{
 		AccountUUID:    uuid.Must(uuid.NewV4()).String(),
 		InitialBalance: account.Balance,
-		TimeSent:       time.Now(),
+		SentAt:         time.Now(),
 	}
 	publish(accountOpened)
 	return &typ.Account{

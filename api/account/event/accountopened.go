@@ -1,10 +1,11 @@
 package event
 
-import "time"
+import (
+	"time"
+)
 
 type AccountOpened struct {
 	AccountUUID    string
 	InitialBalance int
-	TimeSent       time.Time
-	TimeReceived   time.Time
+	SentAt         time.Time
 }
